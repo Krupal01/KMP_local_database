@@ -34,4 +34,16 @@ class LocalDatabase(
     suspend fun insert(name: String) {
         queries.insertUser(name)
     }
+
+
+    suspend fun update(id: Long, name: String) {
+        queries.updateUser(
+            name = name,
+            id = id
+        )
+    }
+
+    suspend fun delete(id: Long) {
+        queries.deleteUser(id)
+    }
 }

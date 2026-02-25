@@ -7,9 +7,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.care.kmp.data.ApiService
 import com.care.kmp.data.UserRepositoryImpl
 import com.care.kmp.database.LocalDatabase
-import com.care.kmp.domain.GetUsersUseCase
-import com.care.kmp.domain.InsertUserUseCase
 import com.care.kmp.domain.User
+import com.care.kmp.domain.UserUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.KClass
@@ -18,6 +17,9 @@ import kotlin.reflect.KClass
 sealed interface UserIntent {
     data class AddUser(val name: String) : UserIntent
     data object LoadUsers : UserIntent
+
+    data class UpdateUser(val id: Long, val name: String) : UserIntent
+    data class DeleteUser(val id: Long) : UserIntent
 }
 
 // STATE
@@ -27,8 +29,7 @@ data class UserState(
 )
 
 class UserViewModel(
-    private val insertUser: suspend (String) -> Unit,
-    private val getUsers: () -> Flow<List<User>>
+    private val userUseCase: UserUseCase,
 ) : ViewModel() {
 
     private val scope =
@@ -41,6 +42,8 @@ class UserViewModel(
         when (intent) {
             is UserIntent.AddUser -> addUser(intent.name)
             UserIntent.LoadUsers -> loadUsers()
+            is UserIntent.DeleteUser -> deleteUser(intent.id)
+            is UserIntent.UpdateUser -> updateUser(intent.id, intent.name)
         }
     }
 
@@ -48,7 +51,7 @@ class UserViewModel(
         scope.launch {
             _state.update { it.copy(isLoading = true) }
 
-            getUsers().collect { users ->
+            userUseCase.getUsers().collect { users ->
                 _state.update {
                     it.copy(
                         users = users,
@@ -61,7 +64,36 @@ class UserViewModel(
 
     private fun addUser(name: String) {
         scope.launch {
-            insertUser(name)
+            userUseCase.insertUser(name)
+            loadUsers()
+        }
+    }
+
+    private fun updateUser(id: Long, name: String) {
+        scope.launch {
+
+            _state.update { it.copy(isLoading = true) }
+
+            try {
+                userUseCase.update(id, name)
+                loadUsers()
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
+        }
+    }
+
+    private fun deleteUser(id: Long) {
+        scope.launch {
+
+            _state.update { it.copy(isLoading = true) }
+
+            try {
+                userUseCase.delete(id)
+                loadUsers()
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 }
@@ -85,8 +117,7 @@ class UserViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
         return UserViewModel(
-            insertUser = { InsertUserUseCase(UserRepositoryImpl(localDatabase, apiService)).invoke(it) },
-            getUsers = { GetUsersUseCase(UserRepositoryImpl(localDatabase, apiService)).invoke() }
+            userUseCase = UserUseCase(UserRepositoryImpl(localDatabase, apiService))
         ) as T
     }
 }

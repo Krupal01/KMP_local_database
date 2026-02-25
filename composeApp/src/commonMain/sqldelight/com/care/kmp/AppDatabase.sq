@@ -9,3 +9,12 @@ VALUES (?);
 
 selectAll:
 SELECT * FROM user;
+
+updateUser:
+UPDATE user
+SET name = ?
+WHERE id = ?;
+
+deleteUser:
+DELETE FROM user
+WHERE id = ?;

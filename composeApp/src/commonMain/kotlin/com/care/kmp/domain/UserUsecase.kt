@@ -1,15 +1,20 @@
 package com.care.kmp.domain
 
-class InsertUserUseCase(
+class UserUseCase(
     private val repository: UserRepository
 ) {
-    suspend operator fun invoke(name: String) {
+
+    suspend fun insertUser(name: String) {
         repository.insert(name)
     }
-}
 
-class GetUsersUseCase(
-    private val repository: UserRepository
-) {
-    operator fun invoke() = repository.getUsers()
+    fun getUsers() = repository.getUsers()
+
+    suspend fun update(id: Long, name: String) {
+        repository.updateUser(id, name)
+    }
+
+    suspend fun delete(id: Long) {
+        repository.deleteUser(id)
+    }
 }

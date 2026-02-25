@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.care.kmp.presentation.UserIntent
 import com.care.kmp.presentation.UserViewModel
 import com.care.kmp.presentation.UserViewModelFactory
+import com.care.kmp.presentation.view.UserItem
 import org.jetbrains.compose.resources.painterResource
 
 import kmp.composeapp.generated.resources.Res
@@ -57,8 +58,16 @@ fun App(viewModel: UserViewModel) {
                 Text("Load")
             }
 
-            state.users.forEach {
-                Text(it.name)
+            state.users.forEach { user ->
+                UserItem(
+                    user = user,
+                    onUpdate = { id, name ->
+                        viewModel.onIntent(UserIntent.UpdateUser(id, name))
+                    },
+                    onDelete = { id ->
+                        viewModel.onIntent(UserIntent.DeleteUser(id))
+                    }
+                )
             }
         }
     }

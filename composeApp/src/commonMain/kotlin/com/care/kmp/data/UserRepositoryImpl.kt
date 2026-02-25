@@ -33,4 +33,22 @@ class UserRepositoryImpl(
             )
         }
     }
+
+    override suspend fun updateUser(id: Long, name: String) {
+        if(getPlatform().name.equals("Web with Kotlin/JS")){
+            apiService.updateUser(id, name)
+        }
+        else {
+            database.update(id,name)
+        }
+    }
+
+    override suspend fun deleteUser(id: Long) {
+        if(getPlatform().name.equals("Web with Kotlin/JS")){
+            apiService.deleteUser(id)
+        }
+        else {
+            database.delete(id)
+        }
+    }
 }
