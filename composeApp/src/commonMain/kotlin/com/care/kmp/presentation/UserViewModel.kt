@@ -4,6 +4,7 @@ package com.care.kmp.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.care.kmp.data.ApiService
 import com.care.kmp.data.UserRepositoryImpl
 import com.care.kmp.database.LocalDatabase
 import com.care.kmp.domain.GetUsersUseCase
@@ -78,13 +79,14 @@ class UserViewModel(
 //}
 
 class UserViewModelFactory(
-    private val localDatabase: LocalDatabase
+    private val localDatabase: LocalDatabase,
+    private val apiService: ApiService
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
         return UserViewModel(
-            insertUser = { InsertUserUseCase(UserRepositoryImpl(localDatabase)).invoke(it) },
-            getUsers = { GetUsersUseCase(UserRepositoryImpl(localDatabase)).invoke() }
+            insertUser = { InsertUserUseCase(UserRepositoryImpl(localDatabase, apiService)).invoke(it) },
+            getUsers = { GetUsersUseCase(UserRepositoryImpl(localDatabase, apiService)).invoke() }
         ) as T
     }
 }
