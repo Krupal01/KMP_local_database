@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.care.kmp.domain.model.Priority
+import com.care.kmp.domain.model.Todo
 import com.care.kmp.presentation.contract.TodoEvents
 import com.care.kmp.presentation.viewmodel.TodoViewModel
 import com.care.kmp.presentation.view.PriorityChip
@@ -44,12 +45,21 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTodoScreen(
+    existingTodo: Todo? = null,                  // null = Add mode, non-null = Edit mode
     viewModel: TodoViewModel = koinViewModel(),
     onNavigateBack: () -> Unit
 ) {
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
+    val isEditMode = existingTodo != null
+
+    var title by remember { mutableStateOf(existingTodo?.title ?: "") }
+    var description by remember { mutableStateOf(existingTodo?.description ?: "") }
+    var selectedPriority by remember {
+        mutableStateOf(
+            existingTodo?.priority
+                ?.let { Priority.valueOf(it.name) }
+                ?: Priority.MEDIUM
+        )
+    }
     var titleError by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
@@ -59,7 +69,7 @@ fun AddTodoScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "New Task",
+                        if (isEditMode) "Edit Task" else "New Task",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -108,7 +118,6 @@ fun AddTodoScreen(
                     )
                 }
 
-                // ── Description field ────────────────────────────────────────
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
                         "Description (optional)",
@@ -130,7 +139,6 @@ fun AddTodoScreen(
                     )
                 }
 
-                // ── Priority selector ────────────────────────────────────────
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
                         "Priority",
@@ -154,13 +162,29 @@ fun AddTodoScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // ── Save button ──────────────────────────────────────────────
                 Button(
                     onClick = {
                         if (title.isBlank()) {
                             titleError = true
                         } else {
-                            viewModel.sendEvent(TodoEvents.AddTodo(title, description, selectedPriority.name))
+                            if (isEditMode) {
+                                viewModel.sendEvent(
+                                    TodoEvents.UpdateTodo(
+                                        id = existingTodo.id,
+                                        title = title,
+                                        description = description,
+                                        priority = selectedPriority.name
+                                    )
+                                )
+                            } else {
+                                viewModel.sendEvent(
+                                    TodoEvents.AddTodo(
+                                        title = title,
+                                        description = description,
+                                        priority = selectedPriority.name
+                                    )
+                                )
+                            }
                             onNavigateBack()
                         }
                     },
@@ -169,11 +193,13 @@ fun AddTodoScreen(
                         .height(54.dp),
                     shape = RoundedCornerShape(14.dp)
                 ) {
-                    Text("Save Task", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        if (isEditMode) "Update Task" else "Save Task",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         }
     }
 }
-
-

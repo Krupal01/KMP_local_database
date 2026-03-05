@@ -13,6 +13,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,11 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.care.kmp.domain.model.Priority
 import com.care.kmp.domain.model.Todo
+import kmp.composeapp.generated.resources.Res
+import kmp.composeapp.generated.resources.ic_update
+import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TodoItem(
     todo: Todo,
     onToggle: () -> Unit,
+    onEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val priorityColor = when (todo.priority) {
@@ -91,6 +99,11 @@ fun TodoItem(
                 }
             }
 
+            IconButton(
+                onClick = onEdit
+            ){
+                Icon(painter = painterResource(Res.drawable.ic_update), contentDescription = "update")
+            }
             // Checkbox
             Checkbox(
                 checked = todo.isCompleted,

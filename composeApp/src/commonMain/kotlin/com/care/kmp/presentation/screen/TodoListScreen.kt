@@ -36,7 +36,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun TodoListScreen(
     backStackEntry: NavBackStackEntry,
     viewModel: TodoViewModel = koinViewModel(),
-    onNavigateToAdd: () -> Unit
+    onNavigateToAdd: () -> Unit,
+    onNavigateToEdit: (Todo) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val visibleTodos = viewModel.visibleTodos
@@ -128,7 +129,8 @@ fun TodoListScreen(
                             SwipeToDeleteTodoItem(
                                 todo = todo,
                                 onToggle = { viewModel.sendEvent(TodoEvents.ToggleTodo(todo.id, !todo.isCompleted)) },
-                                onDelete = { viewModel.sendEvent(TodoEvents.DeleteTodo(todo.id)) }
+                                onDelete = { viewModel.sendEvent(TodoEvents.DeleteTodo(todo.id)) },
+                                onEdit = { onNavigateToEdit(todo) }
                             )
                         }
                     }
@@ -169,7 +171,8 @@ private fun FilterRow(
 private fun SwipeToDeleteTodoItem(
     todo: Todo,
     onToggle: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onEdit: () -> Unit
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -198,7 +201,7 @@ private fun SwipeToDeleteTodoItem(
         },
         enableDismissFromStartToEnd = false
     ) {
-        TodoItem(todo = todo, onToggle = onToggle)
+        TodoItem(todo = todo, onToggle = onToggle, onEdit = onEdit)
     }
 }
 
