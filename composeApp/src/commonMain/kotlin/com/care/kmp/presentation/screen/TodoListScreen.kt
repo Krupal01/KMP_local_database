@@ -27,6 +27,7 @@ import com.care.kmp.presentation.viewmodel.TodoViewModel
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.ic_add
 import kmp.composeapp.generated.resources.ic_delete
+import kmp.composeapp.generated.resources.outline_browse_24
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -37,7 +38,8 @@ fun TodoListScreen(
     backStackEntry: NavBackStackEntry,
     viewModel: TodoViewModel = koinViewModel(),
     onNavigateToAdd: () -> Unit,
-    onNavigateToEdit: (Todo) -> Unit
+    onNavigateToEdit: (Todo) -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val visibleTodos = viewModel.visibleTodos
@@ -68,6 +70,13 @@ fun TodoListScreen(
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = onNavigateToSettings
+                    ){
+                        Icon(painterResource(Res.drawable.outline_browse_24), contentDescription = "Setting")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

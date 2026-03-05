@@ -13,4 +13,5 @@ sealed interface Route {
 
     @Serializable
     data object EditTodo : Route
+    @Serializable object Settings : Route
 }

@@ -6,10 +6,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.care.kmp.domain.model.Todo
 import com.care.kmp.presentation.screen.AddTodoScreen
 import com.care.kmp.presentation.screen.TodoListScreen
+import com.care.settings.presentation.navigation.SettingRoute
+import com.care.settings.presentation.navigation.settingGraph
 import kotlinx.serialization.json.Json
 
 @Composable
@@ -34,6 +35,9 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                         ?.savedStateHandle
                         ?.set("todo", todoJson)  // store as JSON string
                     navController.navigate(Route.EditTodo)
+                },
+                onNavigateToSettings = {
+                    navController.navigate(SettingRoute.Settings)
                 }
             )
         }
@@ -65,5 +69,9 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                 }
             )
         }
+
+        settingGraph(
+            onNavigateBack = { navController.popBackStack() }
+        )
     }
 }
