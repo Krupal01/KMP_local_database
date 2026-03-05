@@ -1,9 +1,9 @@
-package com.care.kmp.data
+package com.care.kmp.data.repository
 
-import com.care.kmp.AppDatabase
-import com.care.kmp.database.LocalDatabase
-import com.care.kmp.domain.User
-import com.care.kmp.domain.UserRepository
+import com.care.kmp.data.local.LocalDatabase
+import com.care.kmp.data.network.ApiService
+import com.care.kmp.domain.model.User
+import com.care.kmp.domain.repository.UserRepository
 import com.care.kmp.getPlatform
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,18 +18,18 @@ class UserRepositoryImpl(
             apiService.addUser(name)
         }
         else {
-            database.insert(name)
+            database.insertUser(name)
         }
     }
 
     override fun getUsers(): Flow<List<User>> = flow {
-        if(getPlatform().name.equals("Web with Kotlin/JS")){
+        if (getPlatform().name.equals("Web with Kotlin/JS")) {
             emit(
-                apiService.getData()
+                apiService.getAllUsers()
             )
-        }else {
+        } else {
             emit(
-                database.getAll()
+                database.getAllUser()
             )
         }
     }
@@ -39,7 +39,7 @@ class UserRepositoryImpl(
             apiService.updateUser(id, name)
         }
         else {
-            database.update(id,name)
+            database.updateUser(id,name)
         }
     }
 
@@ -48,7 +48,7 @@ class UserRepositoryImpl(
             apiService.deleteUser(id)
         }
         else {
-            database.delete(id)
+            database.deleteUser(id)
         }
     }
 }

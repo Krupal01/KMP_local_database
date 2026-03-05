@@ -1,4 +1,4 @@
-package com.care.kmp.domain
+package com.care.kmp.domain.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

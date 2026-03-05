@@ -1,14 +1,14 @@
-package com.care.kmp.presentation
+package com.care.kmp.presentation.viewmodel
 
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.care.kmp.data.ApiService
-import com.care.kmp.data.UserRepositoryImpl
-import com.care.kmp.database.LocalDatabase
-import com.care.kmp.domain.User
-import com.care.kmp.domain.UserUseCase
+import com.care.kmp.data.local.LocalDatabase
+import com.care.kmp.data.network.ApiService
+import com.care.kmp.data.repository.UserRepositoryImpl
+import com.care.kmp.domain.model.User
+import com.care.kmp.domain.usecase.UserUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.KClass

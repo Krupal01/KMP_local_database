@@ -1,4 +1,6 @@
-package com.care.kmp.domain
+package com.care.kmp.domain.usecase
+
+import com.care.kmp.domain.repository.UserRepository
 
 class UserUseCase(
     private val repository: UserRepository

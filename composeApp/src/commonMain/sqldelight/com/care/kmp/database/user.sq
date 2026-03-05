@@ -7,7 +7,7 @@ insertUser:
 INSERT INTO user(name)
 VALUES (?);
 
-selectAll:
+selectAllUser:
 SELECT * FROM user;
 
 updateUser:
@@ -18,3 +18,4 @@ WHERE id = ?;
 deleteUser:
 DELETE FROM user
 WHERE id = ?;
+

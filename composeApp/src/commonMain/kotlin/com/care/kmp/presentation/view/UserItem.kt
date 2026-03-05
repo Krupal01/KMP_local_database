@@ -6,7 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.care.kmp.domain.User
+import com.care.kmp.domain.model.User
 
 @Composable
 fun UserItem(

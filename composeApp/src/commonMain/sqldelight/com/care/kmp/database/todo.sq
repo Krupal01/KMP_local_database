@@ -1,0 +1,45 @@
+import com.care.kmp.domain.model.Priority;
+import kotlin.Boolean;
+
+
+CREATE TABLE todo (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    isCompleted INTEGER AS Boolean NOT NULL DEFAULT 0,
+    priority TEXT AS Priority NOT NULL DEFAULT 'MEDIUM',
+    createdAt TEXT AS kotlinx.datetime.LocalDateTime NOT NULL,
+    dueDate TEXT AS kotlinx.datetime.LocalDateTime
+);
+
+insertTodo:
+INSERT INTO todo(id, title, description, isCompleted, priority, createdAt, dueDate)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+selectAllTodo:
+SELECT * FROM todo;
+
+selectTodoById:
+SELECT * FROM todo
+WHERE id = ?;
+
+updateTodo:
+UPDATE todo
+SET title = ?,
+    description = ?,
+    isCompleted = ?,
+    priority = ?,
+    dueDate = ?
+WHERE id = ?;
+
+toggleCompleteTodo:
+UPDATE todo
+SET isCompleted = ?
+WHERE id = ?;
+
+deleteTodo:
+DELETE FROM todo
+WHERE id = ?;
+
+deleteAllTodo:
+DELETE FROM todo;

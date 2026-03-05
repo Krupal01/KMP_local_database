@@ -1,6 +1,6 @@
-package com.care.kmp.domain
+package com.care.kmp.domain.repository
 
-
+import com.care.kmp.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
