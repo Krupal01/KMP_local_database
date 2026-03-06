@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import com.care.kmp.domain.model.Todo
+import com.care.kmp.presentation.contract.TodoEffects
 import com.care.kmp.presentation.contract.TodoEvents
 import com.care.kmp.presentation.view.TodoItem
 import com.care.kmp.presentation.viewmodel.TodoViewModel
@@ -59,6 +60,26 @@ fun TodoListScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                TodoEffects.NavigateToAddTodo -> {
+                    onNavigateToAdd()
+                }
+                is TodoEffects.NavigateToUpdateTodo -> {
+                    onNavigateToEdit(effect.todo)
+                }
+                is TodoEffects.ShowToast -> {
+
+                }
+
+                TodoEffects.NavigateToSettings ->{
+                    onNavigateToSettings()
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,7 +95,9 @@ fun TodoListScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = onNavigateToSettings
+                        onClick = {
+                            viewModel.sendEvent(TodoEvents.OnClickSettings)
+                        }
                     ){
                         Icon(painterResource(Res.drawable.outline_browse_24), contentDescription = "Setting")
                     }
@@ -86,14 +109,15 @@ fun TodoListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onNavigateToAdd,
+                onClick = { viewModel.sendEvent(TodoEvents.AddTodo) },
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(painterResource(Res.drawable.ic_add), contentDescription = "Add Task")
             }
         }
-    ) { padding ->
+    )
+    { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -139,7 +163,7 @@ fun TodoListScreen(
                                 todo = todo,
                                 onToggle = { viewModel.sendEvent(TodoEvents.ToggleTodo(todo.id, !todo.isCompleted)) },
                                 onDelete = { viewModel.sendEvent(TodoEvents.DeleteTodo(todo.id)) },
-                                onEdit = { onNavigateToEdit(todo) }
+                                onEdit = { viewModel.sendEvent(TodoEvents.UpdateTodo(todo))}
                             )
                         }
                     }

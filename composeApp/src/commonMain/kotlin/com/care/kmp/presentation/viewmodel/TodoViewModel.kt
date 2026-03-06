@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.care.kmp.domain.model.Priority
 import com.care.kmp.domain.model.Todo
 import com.care.kmp.domain.usecase.TodoUseCases
+import com.care.kmp.presentation.contract.AddTodoEvents
 import com.care.kmp.presentation.contract.TodoEffects
+import com.care.kmp.presentation.contract.TodoEffects.*
 import com.care.kmp.presentation.contract.TodoEvents
 import com.care.kmp.presentation.contract.TodoUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,16 +32,19 @@ class TodoViewModel(
     fun sendEvent(event: TodoEvents) {
         when (event) {
             is TodoEvents.LoadTodos -> loadTodos()
-            is TodoEvents.AddTodo -> insertTodo(
-                event.title,
-                event.description,
-                Priority.valueOf(event.priority)
-            )
+            is TodoEvents.AddTodo -> {
+                sendEffect(NavigateToAddTodo)
+            }
 
             is TodoEvents.DeleteTodo -> deleteTodo(event.id)
             is TodoEvents.FilterTodos -> setFilter(event.filterCompleted)
             is TodoEvents.ToggleTodo -> toggleComplete(event.id, event.isCompleted)
-            is TodoEvents.UpdateTodo -> updateTodo(Todo(id = event.id, title = event.title, description = event.description, priority = Priority.valueOf(event.priority)))
+            is TodoEvents.UpdateTodo -> {
+                sendEffect(NavigateToUpdateTodo(event.todo))
+            }
+            TodoEvents.OnClickSettings -> {
+                sendEffect(NavigateToSettings)
+            }
         }
     }
 
@@ -55,6 +60,12 @@ class TodoViewModel(
 
     init {
         loadTodos()
+    }
+
+    private fun sendEffect(effect: TodoEffects) {
+        viewModelScope.launch {
+            _effects.emit(effect)
+        }
     }
 
     private fun loadTodos() {
@@ -82,30 +93,13 @@ class TodoViewModel(
         }
     }
 
-    private fun insertTodo(title: String, description: String, priority: Priority) {
-        viewModelScope.launch {
-            runCatching {
-                useCases.insertTodo(
-                    Todo(title = title, description = description, priority = priority)
-                )
-            }
-                .onSuccess { loadTodos() }
-                .onFailure { e -> _uiState.update { it.copy(error = e.message) } }
-        }
-    }
-
-    private fun updateTodo(todo: Todo) {
-        viewModelScope.launch {
-            runCatching { useCases.updateTodo(todo) }
-                .onSuccess { loadTodos() }
-                .onFailure { e -> _uiState.update { it.copy(error = e.message) } }
-        }
-    }
-
     private fun toggleComplete(id: String, isCompleted: Boolean) {
         viewModelScope.launch {
             runCatching { useCases.toggleComplete(id, isCompleted) }
-                .onSuccess { loadTodos() }
+                .onSuccess {
+                    loadTodos()
+                    sendEffect(TodoEffects.ShowToast("Todo toggled"))
+                }
                 .onFailure { e -> _uiState.update { it.copy(error = e.message) } }
         }
     }

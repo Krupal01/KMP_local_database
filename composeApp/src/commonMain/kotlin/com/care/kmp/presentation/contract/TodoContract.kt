@@ -11,16 +11,20 @@ data class TodoUiState(
 
 sealed class TodoEvents{
     object LoadTodos: TodoEvents()
-    data class AddTodo(val title: String, val description: String, val priority: String): TodoEvents()
-    data class UpdateTodo(val id: String, val title: String, val description: String, val priority: String): TodoEvents()
+
+    object AddTodo: TodoEvents()
+    data class UpdateTodo(val todo: Todo): TodoEvents()
     data class DeleteTodo(val id: String): TodoEvents()
     data class ToggleTodo(val id: String, val isCompleted: Boolean): TodoEvents()
     data class FilterTodos(val filterCompleted: Boolean?): TodoEvents()
+
+    object OnClickSettings: TodoEvents()
 }
 
 sealed class TodoEffects{
-    object LoadTodos: TodoEffects()
     data class ShowToast(val message: String): TodoEffects()
     object NavigateToAddTodo: TodoEffects()
     data class NavigateToUpdateTodo(val todo: Todo): TodoEffects()
+
+    object NavigateToSettings: TodoEffects()
 }

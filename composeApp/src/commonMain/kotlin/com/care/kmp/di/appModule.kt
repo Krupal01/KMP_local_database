@@ -14,6 +14,7 @@ import com.care.kmp.domain.repository.TodoRepository
 import com.care.kmp.domain.repository.UserRepository
 import com.care.kmp.domain.usecase.*
 import com.care.kmp.domain.usecase.TodoUseCases
+import com.care.kmp.presentation.viewmodel.AddTodoViewModel
 import com.care.kmp.presentation.viewmodel.TodoViewModel
 import com.care.kmp.presentation.viewmodel.UserViewModel
 import io.ktor.client.HttpClient
@@ -70,6 +71,7 @@ fun appModule(driver: SqlDriver): Module = module {
 
     viewModel { UserViewModel(get()) }
     viewModelOf(::TodoViewModel)
+    viewModelOf(::AddTodoViewModel)
 }
 
 

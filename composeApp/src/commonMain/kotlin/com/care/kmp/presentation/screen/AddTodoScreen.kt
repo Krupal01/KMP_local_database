@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,11 +35,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.care.kmp.domain.model.Priority
 import com.care.kmp.domain.model.Todo
+import com.care.kmp.presentation.contract.AddTodoEffects
+import com.care.kmp.presentation.contract.AddTodoEvents
+import com.care.kmp.presentation.contract.TodoEffects
 import com.care.kmp.presentation.contract.TodoEvents
 import com.care.kmp.presentation.viewmodel.TodoViewModel
 import com.care.kmp.presentation.view.PriorityChip
+import com.care.kmp.presentation.viewmodel.AddTodoViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -46,23 +52,30 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun AddTodoScreen(
     existingTodo: Todo? = null,                  // null = Add mode, non-null = Edit mode
-    viewModel: TodoViewModel = koinViewModel(),
+    viewModel: AddTodoViewModel = koinViewModel(),
     onNavigateBack: () -> Unit
 ) {
     val isEditMode = existingTodo != null
-
     var title by remember { mutableStateOf(existingTodo?.title ?: "") }
     var description by remember { mutableStateOf(existingTodo?.description ?: "") }
     var selectedPriority by remember {
-        mutableStateOf(
-            existingTodo?.priority
-                ?.let { Priority.valueOf(it.name) }
-                ?: Priority.MEDIUM
-        )
+        mutableStateOf(existingTodo?.priority ?: Priority.MEDIUM)
     }
     var titleError by remember { mutableStateOf(false) }
-
     val focusManager = LocalFocusManager.current
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                is AddTodoEffects.NavigateBack -> onNavigateBack()
+                is AddTodoEffects.ShowToast -> {
+
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -169,23 +182,23 @@ fun AddTodoScreen(
                         } else {
                             if (isEditMode) {
                                 viewModel.sendEvent(
-                                    TodoEvents.UpdateTodo(
-                                        id = existingTodo.id,
-                                        title = title,
-                                        description = description,
-                                        priority = selectedPriority.name
+                                    AddTodoEvents.UpdateTodo(
+                                        todo = existingTodo.copy(
+                                            title = title,
+                                            description = description,
+                                            priority = selectedPriority
+                                        )
                                     )
                                 )
                             } else {
                                 viewModel.sendEvent(
-                                    TodoEvents.AddTodo(
+                                    AddTodoEvents.AddTodo(
                                         title = title,
                                         description = description,
-                                        priority = selectedPriority.name
+                                        priority = selectedPriority
                                     )
                                 )
                             }
-                            onNavigateBack()
                         }
                     },
                     modifier = Modifier
