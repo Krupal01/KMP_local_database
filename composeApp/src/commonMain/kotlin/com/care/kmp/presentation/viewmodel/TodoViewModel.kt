@@ -112,14 +112,6 @@ class TodoViewModel(
         }
     }
 
-    private fun deleteAllTodos() {
-        viewModelScope.launch {
-            runCatching { useCases.deleteAllTodos() }
-                .onSuccess { loadTodos() }
-                .onFailure { e -> _uiState.update { it.copy(error = e.message) } }
-        }
-    }
-
     private fun setFilter(completed: Boolean?) {
         _uiState.update { it.copy(filterCompleted = completed) }
     }
