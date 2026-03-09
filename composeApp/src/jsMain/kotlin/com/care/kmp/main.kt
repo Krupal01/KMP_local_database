@@ -9,6 +9,7 @@ import com.care.kmp.data.network.ApiService
 import com.care.kmp.di.appModule
 import com.care.kmp.presentation.viewmodel.UserViewModel
 import com.care.kmp.presentation.viewmodel.UserViewModelFactory
+import com.care.kmp.service.PermissionManager
 import database.JsDriverFactory
 import kotlinx.browser.document
 import kotlinx.coroutines.MainScope
@@ -36,6 +37,6 @@ fun main() {
 
 fun initKoin(driver: SqlDriver) {
     startKoin {
-        modules(appModule(driver))
+        modules(appModule(driver, permissionManager = PermissionManager()))
     }
 }

@@ -17,6 +17,7 @@ import com.care.kmp.domain.usecase.TodoUseCases
 import com.care.kmp.presentation.viewmodel.AddTodoViewModel
 import com.care.kmp.presentation.viewmodel.TodoViewModel
 import com.care.kmp.presentation.viewmodel.UserViewModel
+import com.care.kmp.service.PermissionManager
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -27,8 +28,13 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-fun appModule(driver: SqlDriver): Module = module {
+fun appModule(
+    driver: SqlDriver,
+    permissionManager: PermissionManager
+    ): Module = module {
     single { driver}
+    single { permissionManager }
+
     single { LocalDatabase(get()) }
 
     single {

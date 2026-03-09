@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1097288888491",
+    "project_id": "fir-de7b0",
+    "storage_bucket": "fir-de7b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097288888491:android:517425bce89be056ba87ee",
+        "android_client_info": {
+          "package_name": "com.care.kmp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQgaHCP0WOfD__4W6-a4Bo2rdwuX9BLTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

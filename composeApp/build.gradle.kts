@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.google.services)
 }
 
 sqldelight {
@@ -58,6 +59,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.android.driver)
             implementation(libs.ktor.client.android)
+            implementation(libs.firebase.messaging)
+            implementation(project.dependencies.platform(libs.firebase.bom))
         }
         commonMain.dependencies {
             implementation(project(":settings"))

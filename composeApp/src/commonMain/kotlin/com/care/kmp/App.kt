@@ -13,9 +13,19 @@ import com.care.kmp.presentation.navigation.AppNavHost
 import com.care.kmp.presentation.viewmodel.UserIntent
 import com.care.kmp.presentation.viewmodel.UserViewModel
 import com.care.kmp.presentation.view.UserItem
+import com.care.kmp.service.PermissionManager
+import org.koin.compose.koinInject
 
 @Composable
 fun App() {
+
+    val permissionManager: PermissionManager = koinInject()
+
+    LaunchedEffect(Unit) {
+        permissionManager.checkAndRequestPermissions()
+    }
+
+
     MaterialTheme {
         AppNavHost()
     }
