@@ -133,7 +133,7 @@ class TodoViewModelTest : BaseTest(), KoinTest {
         advanceUntilIdle()
         val effects = mutableListOf<TodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(TodoEvents.ToggleTodo(id = "1", isCompleted = true))
         advanceUntilIdle()
 
@@ -188,7 +188,7 @@ class TodoViewModelTest : BaseTest(), KoinTest {
         advanceUntilIdle()
         val effects = mutableListOf<TodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(TodoEvents.AddTodo)
         advanceUntilIdle()
 
@@ -201,7 +201,7 @@ class TodoViewModelTest : BaseTest(), KoinTest {
         advanceUntilIdle()
         val effects = mutableListOf<TodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(TodoEvents.UpdateTodo(todo = todo1))
         advanceUntilIdle()
 
@@ -216,7 +216,7 @@ class TodoViewModelTest : BaseTest(), KoinTest {
         advanceUntilIdle()
         val effects = mutableListOf<TodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(TodoEvents.OnClickSettings)
         advanceUntilIdle()
 

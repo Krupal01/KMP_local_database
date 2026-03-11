@@ -63,7 +63,7 @@ class AddTodoViewModelTest : BaseTest(), KoinTest {
     fun `AddTodo emits NavigateBack on success`() = runTest {
         val effects = mutableListOf<AddTodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(
             AddTodoEvents.AddTodo(title = "Task", description = "", priority = Priority.LOW)
         )
@@ -90,7 +90,7 @@ class AddTodoViewModelTest : BaseTest(), KoinTest {
         todoRepo.shouldThrow = true
         val effects = mutableListOf<AddTodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(
             AddTodoEvents.AddTodo(title = "Task", description = "", priority = Priority.LOW)
         )
@@ -121,7 +121,7 @@ class AddTodoViewModelTest : BaseTest(), KoinTest {
         todoRepo.seedTodos(existingTodo)
         val effects = mutableListOf<AddTodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(AddTodoEvents.UpdateTodo(todo = existingTodo.copy(title = "Updated")))
         advanceUntilIdle()
 
@@ -145,7 +145,7 @@ class AddTodoViewModelTest : BaseTest(), KoinTest {
         todoRepo.shouldThrow = true
         val effects = mutableListOf<AddTodoEffects>()
         val job = launch { viewModel.effects.collect { effects.add(it) } }
-
+        advanceUntilIdle()
         viewModel.sendEvent(AddTodoEvents.UpdateTodo(todo = existingTodo))
         advanceUntilIdle()
 

@@ -30,6 +30,16 @@ core = "1.5.0"
 koin = "4.1.1"
 firebaseMessaging = "24.0.0"
 googleServices = "4.4.2"
+espresso = "3.7.0"
+mockito = "5.21.0"
+mockitoKotlin = "6.2.3"
+testExtJunit = "1.3.0"
+mockk = "1.14.9"
+mockkCommon = "1.12.5"
+turbine = "1.2.1"
+hamcrest = "3.0"
+robolectric = "4.14.1"
+jacoco = "0.8.12"
 
 [libraries]
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
@@ -75,6 +85,18 @@ kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", versio
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+# Mockito
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+# MockK
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-common = {module = "io.mockk:mockk-common", version.ref = "mockkCommon"}
+# Flow testing
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+# Hamcrest
+hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "hamcrest" }
+# Robolectric
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 
 

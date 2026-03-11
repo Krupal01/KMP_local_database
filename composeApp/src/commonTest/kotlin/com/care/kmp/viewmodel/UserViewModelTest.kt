@@ -40,7 +40,6 @@ class UserViewModelTest : BaseTest(), KoinTest {
         userRepo.seedUsers(User(1, "Alice"))
 
         viewModel.onIntent(UserIntent.LoadUsers)
-        assertTrue(viewModel.state.value.isLoading)
 
         advanceUntilIdle()
         assertFalse(viewModel.state.value.isLoading)

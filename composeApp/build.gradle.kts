@@ -10,6 +10,11 @@ plugins {
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.google.services)
+    jacoco
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 sqldelight {
@@ -61,6 +66,11 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.firebase.messaging)
             implementation(project.dependencies.platform(libs.firebase.bom))
+//            implementation(libs.mockito.core)
+//            implementation(libs.mockito.kotlin)
+//            implementation(libs.robolectric)
+//            implementation(libs.turbine)
+//            implementation(libs.hamcrest)
         }
         commonMain.dependencies {
             implementation(project(":settings"))
@@ -98,6 +108,11 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.turbine)
+            implementation(libs.mockk.common)
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.koin.test)
         }
 
         jsMain.dependencies {
@@ -114,6 +129,13 @@ kotlin {
             implementation(npm("sql.js", "1.8.0"))
             implementation(libs.web.worker.driver)
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
+        }
+
+        androidUnitTest.dependencies {
+            implementation(libs.junit)
+            implementation(libs.hamcrest)
+            implementation(libs.mockk)
+            implementation(libs.kotlin.testJunit)
         }
 
     }
@@ -138,6 +160,10 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+        }
+        debug {
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
     }
     compileOptions {
