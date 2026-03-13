@@ -7,8 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.care.kmp.domain.model.Todo
+import com.care.kmp.domain.model.toTodoModel
 import com.care.kmp.presentation.screen.AddTodoScreen
 import com.care.kmp.presentation.screen.TodoListScreen
+import com.care.schedule.presentation.navigation.ScheduleRoute
+import com.care.schedule.presentation.navigation.scheduleGraph
 import com.care.settings.presentation.navigation.SettingRoute
 import com.care.settings.presentation.navigation.settingGraph
 import kotlinx.serialization.json.Json
@@ -38,6 +41,13 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                 },
                 onNavigateToSettings = {
                     navController.navigate(SettingRoute.Settings)
+                },
+                onNavigateToSchedule = { todo ->
+                    navController.navigate(
+                        ScheduleRoute.Schedule(
+                            encodedTodo = todo.toTodoModel().encode()
+                        )
+                    )
                 }
             )
         }
@@ -71,6 +81,10 @@ fun AppNavHost(modifier: Modifier = Modifier) {
         }
 
         settingGraph(
+            onNavigateBack = { navController.popBackStack() }
+        )
+
+        scheduleGraph(
             onNavigateBack = { navController.popBackStack() }
         )
     }

@@ -13,6 +13,7 @@ androidx-testExt = "1.3.0"
 composeMultiplatform = "1.10.0"
 composeIcon = "1.7.3"
 firebaseBom = "34.10.0"
+kotlinxBrowser = "0.5.0"
 kotlinxCoroutinesTest = "1.10.0"
 material3-window-size = "1.9.0"
 junit = "4.13.2"
@@ -40,9 +41,11 @@ turbine = "1.2.1"
 hamcrest = "3.0"
 robolectric = "4.14.1"
 jacoco = "0.8.12"
+workRuntimeKtx = "2.11.1"
 
 [libraries]
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin"}
@@ -64,6 +67,7 @@ compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.re
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinxBrowser" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 material3-window-size = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3-window-size" }
 androidx-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "composeIcon" }
@@ -97,6 +101,8 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "hamcrest" }
 # Robolectric
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+
 
 
 

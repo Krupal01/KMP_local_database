@@ -1,5 +1,6 @@
 package com.care.kmp.domain.model
 
+import com.care.schedule.domain.model.TodoModel
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -24,3 +25,12 @@ data class Todo(
 
 private fun generateId(): String =
     Clock.System.now().toEpochMilliseconds().toString()
+
+fun Todo.toTodoModel() : TodoModel {
+    return TodoModel(
+        id = id,
+        title = title,
+        description = description,
+        priority = priority.name,
+    )
+}

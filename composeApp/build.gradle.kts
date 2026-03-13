@@ -74,6 +74,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(project(":settings"))
+            implementation(project(":schedule"))
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

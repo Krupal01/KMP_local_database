@@ -45,6 +45,10 @@ class TodoViewModel(
             TodoEvents.OnClickSettings -> {
                 sendEffect(NavigateToSettings)
             }
+
+            is TodoEvents.OnClickSchedule -> {
+                sendEffect(NavigateToSchedule(event.todo))
+            }
         }
     }
 

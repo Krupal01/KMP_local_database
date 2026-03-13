@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import com.care.kmp.di.appModule
 import com.care.kmp.service.PermissionManager
+import com.care.schedule.di.scheduleModule
 import database.AndroidDriverFactory
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -12,8 +13,12 @@ import org.koin.core.context.startKoin
 fun initKoin(context: Context, activity: Activity) {
     startKoin {
         androidContext(context)
-        modules(appModule(AndroidDriverFactory(context).createDriver(),
-            PermissionManager(activity)
-        ))
+        modules(
+            appModule(
+                AndroidDriverFactory(context).createDriver(),
+                PermissionManager(activity)
+            ),
+            scheduleModule
+        )
     }
 }

@@ -19,6 +19,8 @@ sealed class TodoEvents{
     data class FilterTodos(val filterCompleted: Boolean?): TodoEvents()
 
     object OnClickSettings: TodoEvents()
+
+    data class OnClickSchedule(val todo: Todo): TodoEvents()
 }
 
 sealed class TodoEffects{
@@ -27,4 +29,6 @@ sealed class TodoEffects{
     data class NavigateToUpdateTodo(val todo: Todo): TodoEffects()
 
     object NavigateToSettings: TodoEffects()
+
+    data class NavigateToSchedule(val todo: Todo): TodoEffects()
 }

@@ -40,7 +40,8 @@ fun TodoListScreen(
     viewModel: TodoViewModel = koinViewModel(),
     onNavigateToAdd: () -> Unit,
     onNavigateToEdit: (Todo) -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToSchedule: (Todo) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val visibleTodos = viewModel.visibleTodos
@@ -75,6 +76,10 @@ fun TodoListScreen(
 
                 TodoEffects.NavigateToSettings ->{
                     onNavigateToSettings()
+                }
+
+                is TodoEffects.NavigateToSchedule -> {
+                    onNavigateToSchedule(effect.todo)
                 }
             }
         }
@@ -163,7 +168,8 @@ fun TodoListScreen(
                                 todo = todo,
                                 onToggle = { viewModel.sendEvent(TodoEvents.ToggleTodo(todo.id, !todo.isCompleted)) },
                                 onDelete = { viewModel.sendEvent(TodoEvents.DeleteTodo(todo.id)) },
-                                onEdit = { viewModel.sendEvent(TodoEvents.UpdateTodo(todo))}
+                                onEdit = { viewModel.sendEvent(TodoEvents.UpdateTodo(todo))},
+                                onSchedule = { viewModel.sendEvent(TodoEvents.OnClickSchedule(todo)) }
                             )
                         }
                     }
@@ -205,7 +211,8 @@ private fun SwipeToDeleteTodoItem(
     todo: Todo,
     onToggle: () -> Unit,
     onDelete: () -> Unit,
-    onEdit: () -> Unit
+    onEdit: () -> Unit,
+    onSchedule: () -> Unit
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -234,7 +241,7 @@ private fun SwipeToDeleteTodoItem(
         },
         enableDismissFromStartToEnd = false
     ) {
-        TodoItem(todo = todo, onToggle = onToggle, onEdit = onEdit)
+        TodoItem(todo = todo, onToggle = onToggle, onEdit = onEdit, onSchedule = onSchedule)
     }
 }
 

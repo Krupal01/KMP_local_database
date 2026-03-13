@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.care.kmp.domain.model.Priority
 import com.care.kmp.domain.model.Todo
 import kmp.composeapp.generated.resources.Res
+import kmp.composeapp.generated.resources.ic_open_clock
 import kmp.composeapp.generated.resources.ic_update
 import org.jetbrains.compose.resources.painterResource
 
@@ -40,6 +41,7 @@ fun TodoItem(
     todo: Todo,
     onToggle: () -> Unit,
     onEdit: () -> Unit,
+    onSchedule: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val priorityColor = when (todo.priority) {
@@ -97,6 +99,12 @@ fun TodoItem(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
+            }
+
+            IconButton(
+                onClick = onSchedule
+            ){
+                Icon(painter = painterResource(Res.drawable.ic_open_clock), contentDescription = "open clock")
             }
 
             IconButton(
