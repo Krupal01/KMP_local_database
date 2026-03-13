@@ -42,7 +42,8 @@ fun TodoItem(
     onToggle: () -> Unit,
     onEdit: () -> Unit,
     onSchedule: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onShowDetail: () -> Unit
 ) {
     val priorityColor = when (todo.priority) {
         Priority.LOW    -> Color(0xFF4CAF50)
@@ -59,7 +60,8 @@ fun TodoItem(
                 MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
             else
                 MaterialTheme.colorScheme.surface
-        )
+        ),
+        onClick = onShowDetail
     ) {
         Row(
             modifier = Modifier.padding(12.dp),

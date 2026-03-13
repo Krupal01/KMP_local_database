@@ -49,6 +49,10 @@ class TodoViewModel(
             is TodoEvents.OnClickSchedule -> {
                 sendEffect(NavigateToSchedule(event.todo))
             }
+
+            is TodoEvents.ShowDetails -> {
+                sendEffect(ShowDetailSheet(event.todo))
+            }
         }
     }
 

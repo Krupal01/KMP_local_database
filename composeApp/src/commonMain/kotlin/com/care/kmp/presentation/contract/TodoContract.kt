@@ -21,6 +21,7 @@ sealed class TodoEvents{
     object OnClickSettings: TodoEvents()
 
     data class OnClickSchedule(val todo: Todo): TodoEvents()
+    data class ShowDetails(val todo: Todo): TodoEvents()
 }
 
 sealed class TodoEffects{
@@ -31,4 +32,6 @@ sealed class TodoEffects{
     object NavigateToSettings: TodoEffects()
 
     data class NavigateToSchedule(val todo: Todo): TodoEffects()
+
+    data class ShowDetailSheet(val todo: Todo): TodoEffects()
 }

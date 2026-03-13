@@ -23,12 +23,14 @@ import androidx.navigation.NavBackStackEntry
 import com.care.kmp.domain.model.Todo
 import com.care.kmp.presentation.contract.TodoEffects
 import com.care.kmp.presentation.contract.TodoEvents
+import com.care.kmp.presentation.view.TodoDetailBottomSheet
 import com.care.kmp.presentation.view.TodoItem
 import com.care.kmp.presentation.viewmodel.TodoViewModel
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.ic_add
 import kmp.composeapp.generated.resources.ic_delete
 import kmp.composeapp.generated.resources.outline_browse_24
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -48,6 +50,10 @@ fun TodoListScreen(
 
     val totalCount     = uiState.todos.size
     val completedCount = uiState.todos.count { it.isCompleted }
+
+    var selectedTodo by remember { mutableStateOf<Todo?>(null) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
 
     // Observe result from AddTodo screen
     val todoAdded = backStackEntry.savedStateHandle
@@ -81,8 +87,23 @@ fun TodoListScreen(
                 is TodoEffects.NavigateToSchedule -> {
                     onNavigateToSchedule(effect.todo)
                 }
+
+                is TodoEffects.ShowDetailSheet -> {
+                    selectedTodo = effect.todo
+                }
             }
         }
+    }
+
+    selectedTodo?.let { todo ->
+        TodoDetailBottomSheet(
+            todo = todo,
+            sheetState = sheetState,
+            onDismiss = {
+                scope.launch { sheetState.hide() }
+                    .invokeOnCompletion { selectedTodo = null }
+            }
+        )
     }
 
     Scaffold(
@@ -169,7 +190,8 @@ fun TodoListScreen(
                                 onToggle = { viewModel.sendEvent(TodoEvents.ToggleTodo(todo.id, !todo.isCompleted)) },
                                 onDelete = { viewModel.sendEvent(TodoEvents.DeleteTodo(todo.id)) },
                                 onEdit = { viewModel.sendEvent(TodoEvents.UpdateTodo(todo))},
-                                onSchedule = { viewModel.sendEvent(TodoEvents.OnClickSchedule(todo)) }
+                                onSchedule = { viewModel.sendEvent(TodoEvents.OnClickSchedule(todo)) },
+                                onShowDetail = { viewModel.sendEvent(TodoEvents.ShowDetails(todo)) }
                             )
                         }
                     }
@@ -212,7 +234,8 @@ private fun SwipeToDeleteTodoItem(
     onToggle: () -> Unit,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
-    onSchedule: () -> Unit
+    onSchedule: () -> Unit,
+    onShowDetail: () -> Unit
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -241,7 +264,8 @@ private fun SwipeToDeleteTodoItem(
         },
         enableDismissFromStartToEnd = false
     ) {
-        TodoItem(todo = todo, onToggle = onToggle, onEdit = onEdit, onSchedule = onSchedule)
+        TodoItem(todo = todo, onToggle = onToggle, onEdit = onEdit, onSchedule = onSchedule,
+            onShowDetail = onShowDetail)
     }
 }
 
