@@ -15,6 +15,7 @@ composeIcon = "1.7.3"
 firebaseBom = "34.10.0"
 kotlinxBrowser = "0.5.0"
 kotlinxCoroutinesTest = "1.10.0"
+mapsCompose = "8.2.1"
 material3-window-size = "1.9.0"
 junit = "4.13.2"
 kotlin = "2.3.0"
@@ -69,6 +70,7 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinxBrowser" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 material3-window-size = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3-window-size" }
 androidx-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "composeIcon" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }

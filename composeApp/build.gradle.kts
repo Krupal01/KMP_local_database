@@ -71,6 +71,7 @@ kotlin {
 //            implementation(libs.robolectric)
 //            implementation(libs.turbine)
 //            implementation(libs.hamcrest)
+            implementation(libs.maps.compose)
         }
         commonMain.dependencies {
             implementation(project(":settings"))
@@ -123,6 +124,7 @@ kotlin {
             implementation(libs.web.worker.driver)
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
             implementation(libs.ktor.client.js)
+            implementation(npm("@types/google.maps", "3.55.0"))
 
         }
 

@@ -53,6 +53,10 @@ class TodoViewModel(
             is TodoEvents.ShowDetails -> {
                 sendEffect(ShowDetailSheet(event.todo))
             }
+
+            TodoEvents.OnClickMap -> {
+                sendEffect(NavigateToMap)
+            }
         }
     }
 

@@ -20,6 +20,8 @@ sealed class TodoEvents{
 
     object OnClickSettings: TodoEvents()
 
+    object OnClickMap: TodoEvents()
+
     data class OnClickSchedule(val todo: Todo): TodoEvents()
     data class ShowDetails(val todo: Todo): TodoEvents()
 }
@@ -30,6 +32,8 @@ sealed class TodoEffects{
     data class NavigateToUpdateTodo(val todo: Todo): TodoEffects()
 
     object NavigateToSettings: TodoEffects()
+
+    object NavigateToMap: TodoEffects()
 
     data class NavigateToSchedule(val todo: Todo): TodoEffects()
 

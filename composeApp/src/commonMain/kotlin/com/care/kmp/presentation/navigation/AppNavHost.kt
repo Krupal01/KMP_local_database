@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.care.kmp.domain.model.Todo
 import com.care.kmp.domain.model.toTodoModel
 import com.care.kmp.presentation.screen.AddTodoScreen
+import com.care.kmp.presentation.screen.MapScreen
 import com.care.kmp.presentation.screen.TodoListScreen
 import com.care.schedule.presentation.navigation.ScheduleRoute
 import com.care.schedule.presentation.navigation.scheduleGraph
@@ -48,6 +49,9 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                             encodedTodo = todo.toTodoModel().encode()
                         )
                     )
+                },
+                onNavigateToMap = {
+                    navController.navigate(Route.Map)
                 }
             )
         }
@@ -78,6 +82,10 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable <Route.Map>{
+            MapScreen()
         }
 
         settingGraph(

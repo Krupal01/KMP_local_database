@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.*
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -44,6 +46,7 @@ fun TodoListScreen(
     onNavigateToEdit: (Todo) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToSchedule: (Todo) -> Unit,
+    onNavigateToMap: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val visibleTodos = viewModel.visibleTodos
@@ -91,6 +94,10 @@ fun TodoListScreen(
                 is TodoEffects.ShowDetailSheet -> {
                     selectedTodo = effect.todo
                 }
+
+                TodoEffects.NavigateToMap -> {
+                    onNavigateToMap()
+                }
             }
         }
     }
@@ -126,6 +133,13 @@ fun TodoListScreen(
                         }
                     ){
                         Icon(painterResource(Res.drawable.outline_browse_24), contentDescription = "Setting")
+                    }
+                    IconButton(
+                        onClick = {
+                            viewModel.sendEvent(TodoEvents.OnClickMap)
+                        }
+                    ){
+                        Icon(Icons.Default.Map, contentDescription = "Setting")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
