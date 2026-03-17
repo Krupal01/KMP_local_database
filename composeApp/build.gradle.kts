@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -12,7 +13,11 @@ plugins {
     alias(libs.plugins.google.services)
     jacoco
 }
-
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) load(file.inputStream())
+}
+val mapsApiKey = localProperties.getProperty("MAPS_API_KEY", "")
 jacoco {
     toolVersion = "0.8.12"
 }
@@ -155,6 +160,13 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+        // OR if using Google Maps SDK, also add to manifest:
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+    }
+    buildFeatures {
+        buildConfig = true
     }
     packaging {
         resources {
@@ -180,3 +192,20 @@ dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
 
+// Make the JS compile task depend on this
+tasks.named("jsProcessResources") {   // use "jsProcessResources" for JS target
+    doLast {
+        val htmlFile = layout.buildDirectory
+            .file("processedResources/js/main/index.html")
+            .get().asFile
+
+        if (htmlFile.exists()) {
+            val content = htmlFile.readText()
+            val updated = content.replace("YOUR_API_KEY", mapsApiKey)
+            htmlFile.writeText(updated)
+            println("✅ Maps API key injected into index.html")
+        } else {
+            println("❌ index.html not found at: ${htmlFile.absolutePath}")
+        }
+    }
+}

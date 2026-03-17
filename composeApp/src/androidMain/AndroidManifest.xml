@@ -27,7 +27,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_ANDROID_API_KEY" />
+            android:value="${MAPS_API_KEY}" />
         <service
             android:name=".MyFirebaseService"
             android:exported="false">
