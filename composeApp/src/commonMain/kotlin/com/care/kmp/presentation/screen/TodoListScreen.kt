@@ -25,6 +25,9 @@ import androidx.navigation.NavBackStackEntry
 import com.care.kmp.domain.model.Todo
 import com.care.kmp.presentation.contract.TodoEffects
 import com.care.kmp.presentation.contract.TodoEvents
+import com.care.kmp.presentation.navigation.BottomNavItem
+import com.care.kmp.presentation.navigation.Route
+import com.care.kmp.presentation.view.AppBottomBar
 import com.care.kmp.presentation.view.TodoDetailBottomSheet
 import com.care.kmp.presentation.view.TodoItem
 import com.care.kmp.presentation.viewmodel.TodoViewModel
@@ -134,13 +137,13 @@ fun TodoListScreen(
                     ){
                         Icon(painterResource(Res.drawable.outline_browse_24), contentDescription = "Setting")
                     }
-                    IconButton(
-                        onClick = {
-                            viewModel.sendEvent(TodoEvents.OnClickMap)
-                        }
-                    ){
-                        Icon(Icons.Default.Map, contentDescription = "Setting")
-                    }
+//                    IconButton(
+//                        onClick = {
+//                            viewModel.sendEvent(TodoEvents.OnClickMap)
+//                        }
+//                    ){
+//                        Icon(Icons.Default.Map, contentDescription = "Setting")
+//                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
@@ -155,6 +158,19 @@ fun TodoListScreen(
             ) {
                 Icon(painterResource(Res.drawable.ic_add), contentDescription = "Add Task")
             }
+        },
+        bottomBar = {
+            AppBottomBar(
+                clickOnTab = {
+                    when(it){
+                        BottomNavItem.Map -> {
+                            viewModel.sendEvent(TodoEvents.OnClickMap)
+                        }
+                        BottomNavItem.Todo -> {}
+                    }
+                },
+                currentRoute = Route.TodoList,
+            )
         }
     )
     { padding ->

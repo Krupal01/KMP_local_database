@@ -85,7 +85,11 @@ fun AppNavHost(modifier: Modifier = Modifier) {
         }
 
         composable <Route.Map>{
-            MapScreen()
+            MapScreen(
+                navigateToTodoList = {
+                    navController.navigate(Route.TodoList)
+                }
+            )
         }
 
         settingGraph(
