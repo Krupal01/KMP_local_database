@@ -66,6 +66,9 @@ fun TodoListScreen(
         .getStateFlow("todoAdded", false)
         .collectAsState()
 
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var deleteTodoId by remember { mutableStateOf<String?>(null) }
+
     LaunchedEffect(todoAdded.value) {
         if (todoAdded.value) {
             viewModel.sendEvent(TodoEvents.LoadTodos)
@@ -101,8 +104,48 @@ fun TodoListScreen(
                 TodoEffects.NavigateToMap -> {
                     onNavigateToMap()
                 }
+
+                is TodoEffects.ShowConfirmDialog -> {
+                    deleteTodoId = effect.id
+                    showDeleteDialog = true
+                }
             }
         }
+    }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+            },
+            title = {
+                Text("Delete Todo")
+            },
+            text = {
+                Text("Are you sure you want to delete this task?")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        deleteTodoId?.let {
+                            viewModel.sendEvent(TodoEvents.DeleteTodo(it))
+                        }
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 
     selectedTodo?.let { todo ->
@@ -218,7 +261,7 @@ fun TodoListScreen(
                             SwipeToDeleteTodoItem(
                                 todo = todo,
                                 onToggle = { viewModel.sendEvent(TodoEvents.ToggleTodo(todo.id, !todo.isCompleted)) },
-                                onDelete = { viewModel.sendEvent(TodoEvents.DeleteTodo(todo.id)) },
+                                onDelete = { viewModel.sendEvent(TodoEvents.ConfirmDeleteTodo(todo.id)) },
                                 onEdit = { viewModel.sendEvent(TodoEvents.UpdateTodo(todo))},
                                 onSchedule = { viewModel.sendEvent(TodoEvents.OnClickSchedule(todo)) },
                                 onShowDetail = { viewModel.sendEvent(TodoEvents.ShowDetails(todo)) }
@@ -269,7 +312,7 @@ private fun SwipeToDeleteTodoItem(
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
-            if (value == SwipeToDismissBoxValue.EndToStart) { onDelete(); true }
+            if (value == SwipeToDismissBoxValue.EndToStart) { onDelete(); false }
             else false
         }
     )

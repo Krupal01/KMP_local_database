@@ -14,6 +14,7 @@ sealed class TodoEvents{
 
     object AddTodo: TodoEvents()
     data class UpdateTodo(val todo: Todo): TodoEvents()
+    data class ConfirmDeleteTodo(val id: String): TodoEvents()
     data class DeleteTodo(val id: String): TodoEvents()
     data class ToggleTodo(val id: String, val isCompleted: Boolean): TodoEvents()
     data class FilterTodos(val filterCompleted: Boolean?): TodoEvents()
@@ -38,4 +39,6 @@ sealed class TodoEffects{
     data class NavigateToSchedule(val todo: Todo): TodoEffects()
 
     data class ShowDetailSheet(val todo: Todo): TodoEffects()
+
+    data class ShowConfirmDialog(val id: String): TodoEffects()
 }

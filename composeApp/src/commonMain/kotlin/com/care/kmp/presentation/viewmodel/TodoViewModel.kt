@@ -57,6 +57,10 @@ class TodoViewModel(
             TodoEvents.OnClickMap -> {
                 sendEffect(NavigateToMap)
             }
+
+            is TodoEvents.ConfirmDeleteTodo -> {
+                sendEffect(ShowConfirmDialog(event.id))
+            }
         }
     }
 
